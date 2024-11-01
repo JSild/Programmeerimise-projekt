@@ -42,8 +42,12 @@ def lingid_santamaria():
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     lingid = soup.find_all('a', class_ = 'sm-recipe-card__image-link')
-
+    
     for link in lingid:
         print(link.get('href'))
+        
+
+    
+
 
 lingid_santamaria()
