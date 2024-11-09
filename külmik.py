@@ -33,7 +33,7 @@ def lingid_santamaria():
         print(link.get('href'))
 
 
-## funktsioon leiab igast lingist koostis osad ja kirjutab faili need koostisosad lingina + lingi.
+## funktsioon leiab igast lingist koostis osad ja kirjutab faili need koostisosad listina + lingi.
 
 def koostisosad():
     file = open('santamaria_lingid.txt', encoding='UTF-8')
@@ -63,6 +63,8 @@ def koostisosad():
     file.close()
     file2.close()
 
+
+## SIIT ALGAVAD PÕHIPROGRAMMI FUNKT.
 # funktsioon võtab failist iga eraldi retsepti ja väljastab iga retsepti omakorda listina
 def andmed_failist(fail):
     lst_retsept = []
@@ -94,9 +96,6 @@ def andmete_ühilduvus(jär1, jär2):
                         ühised_sõnad.append(sõne_lst)
     return len(ühised_sõnad)
 
-    
-
-
 
 def main():
     külmik = input('Sisesta külmiku jäägid nt(vahukoor pasta): ')
@@ -104,11 +103,14 @@ def main():
     lst_retsept = andmed_failist('santamaria_koostisosad.txt')
     suurim_sarnasus = 0
     count = 0
+    
+    ## leiab suurima sarnanuse üle kõikide retseptide
     for retsept in lst_retsept:
         ühised = andmete_ühilduvus(retsept[0], lst_külmik)
         if ühised > suurim_sarnasus:
             suurim_sarnasus = ühised
     
+    #väljastab suurimate sarnastustega retseptide lingid
     for retsept in lst_retsept:
         if suurim_sarnasus == andmete_ühilduvus(retsept[0], lst_külmik):
             print (retsept[1])
