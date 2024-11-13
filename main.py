@@ -25,7 +25,7 @@ def andmete_ühilduvus(jär1, jär2):
         for sõne2 in jär2:
             if sõne2 in el:
                 ühised_sõnad.append(sõne2)
-    return len(ühised_sõnad)
+    return [len(ühised_sõnad), len(jär1) - len(ühised_sõnad)]
 
 
 def main():
@@ -38,12 +38,12 @@ def main():
     ## leiab suurima sarnanuse üle kõikide retseptide
     for retsept in lst_retsept:
         ühised = andmete_ühilduvus(retsept[0], lst_külmik)
-        if ühised > suurim_sarnasus:
-            suurim_sarnasus = ühised
         if retsept[1] not in sõnastik:
             sõnastik[retsept[1]] = ühised
 
-    print([el for el in sõnastik.items() if el[1] == max(sõnastik.values())])
-
+    for link, v in sõnastik.items():
+        if v[0] == max(value[0] for value in sõnastik.values()):
+            print(link, v)
+            
 if __name__ == '__main__':
     main()
