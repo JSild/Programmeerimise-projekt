@@ -88,12 +88,15 @@ def andmete_ühilduvus(jär1, jär2):
         sõne_lst = el.split()
         for sõne in sõne_lst:
             for sõne2 in jär2:
-                if len(sõne2) > 3:
-                    if sõne2[:4] == sõne[:4]:
-                        ühised_sõnad.append(sõne_lst)
-                else:
-                    if sõne2[:3] == sõne[:3]:
-                        ühised_sõnad.append(sõne_lst)
+                if sõne2 in sõne:
+                    ühised_sõnad.append(sõne_lst)
+                
+                # if len(sõne2) > 3:
+                #     if sõne2[:4] == sõne[:4]:
+                #         ühised_sõnad.append(sõne_lst)
+                # else:
+                #     if sõne2[:3] == sõne[:3]:
+                #         ühised_sõnad.append(sõne_lst)
     return len(ühised_sõnad)
 
 
