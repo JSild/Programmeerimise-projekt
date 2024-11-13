@@ -1,3 +1,18 @@
+################################################
+# Programmeerimine I
+# 2024/2025 sügissemester
+#
+# Projekt
+# Teema: Üliõpilaskülmik
+#
+#
+# Autorid: Hardy Reinhold, Jasper Suursild
+#
+# mõningane eeskuju: Rimi 'Tühjenda oma külmik'
+#
+# Lisakommentaar (nt käivitusjuhend): terminalist käivitades 'streamlit run main.py'
+#
+##################################################
 import ast
 import streamlit as st
 
