@@ -28,9 +28,9 @@ def lingid_santamaria():
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     lingid = soup.find_all('a', class_ = 'sm-recipe-card__image-link')
-    
-    for link in lingid:
-        print(link.get('href'))
+    with open('santamaria_lingid.txt', 'w', encoding='UTF-8') as fail
+        for link in lingid:
+            fail.writelines(f'{link.get('href')}\n')
 
 
 ## funktsioon leiab igast lingist koostis osad ja kirjutab faili need koostisosad listina + lingi.
@@ -65,66 +65,8 @@ def koostisosad():
 
 
 ## SIIT ALGAVAD PÕHIPROGRAMMI FUNKT.
-# funktsioon võtab failist iga eraldi retsepti ja väljastab iga retsepti omakorda listina
-def andmed_failist(fail):
-    lst_retsept = []
-    with open(fail, encoding='UTF-8') as f:
-        for rida in f:
-            retsept = []
-            üks_retsept = rida.strip().split(' | ')
-            lst_päris = ast.literal_eval(üks_retsept[0])
-            retsept.append(lst_päris)
-            retsept.append(üks_retsept[1])
-            lst_retsept.append(retsept)
-
-    return lst_retsept
 
 
-#järjend 1 peab olema retsepti järjend ja jär2 on külmiku jääkide järjend
-#funktsioon leiab ühiste sõnade arvu mõlemas järjendis
-def andmete_ühilduvus(jär1, jär2):
-    ühised_sõnad = []
-    for el in jär1:
-        sõne_lst = el.split()
-        for sõne in sõne_lst:
-            for sõne2 in jär2:
-                if sõne2 in sõne:
-                    ühised_sõnad.append(sõne_lst)
-                
-                # if len(sõne2) > 3:
-                #     if sõne2[:4] == sõne[:4]:
-                #         ühised_sõnad.append(sõne_lst)
-                # else:
-                #     if sõne2[:3] == sõne[:3]:
-                #         ühised_sõnad.append(sõne_lst)
-    return len(ühised_sõnad)
-
-
-def main():
-    külmik = input('Sisesta külmiku jäägid nt(vahukoor pasta): ')
-    lst_külmik = külmik.split()
-    lst_retsept = andmed_failist('santamaria_koostisosad.txt')
-    suurim_sarnasus = 0
-    count = 0
-    
-    ## leiab suurima sarnanuse üle kõikide retseptide
-    for retsept in lst_retsept:
-        ühised = andmete_ühilduvus(retsept[0], lst_külmik)
-        if ühised > suurim_sarnasus:
-            suurim_sarnasus = ühised
-    
-    #väljastab suurimate sarnastustega retseptide lingid
-    for retsept in lst_retsept:
-        if suurim_sarnasus == andmete_ühilduvus(retsept[0], lst_külmik):
-            print (retsept[1])
-            count += 1
-            if count == 5:
-                break
-
-    print(suurim_sarnasus)
-
-if __name__ == '__main__':
-    main()
 
 
 
