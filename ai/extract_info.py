@@ -15,14 +15,20 @@ async def fetch_and_parse(session, link):
     async with session.get(link, ssl=False) as response:
         r_text = await response.text()
         soup = BeautifulSoup(r_text, 'html.parser')
-        ul_tag = soup.find('ul', class_='td-arrow-list')
-        if ul_tag:
-            ingredients = []
-            for li in ul_tag.find_all('li'):
-                ingredients.append(li.get_text())
-            return (ingredients, link)
+        ul_tags = soup.find_all('ul', class_='td-arrow-list')
+        ingredients = [li.get_text(strip=True) for ul in ul_tags for li in ul.find_all('li')]
+        if ingredients:
+            return ingredients, link
         else:
             return False
+        # for ul_tag in ul_tags
+        #     if ul_tag:
+        #         ingredients = []
+        #         for li in ul_tag.find_all('li'):
+        #             ingredients.append(li.get_text())
+        #         return (ingredients, link)
+        #     else:
+        #         return False
 
 def getinfo_Retseptisahtel(x):
     #base url kus x = leheküljenumber
@@ -46,21 +52,17 @@ def getinfo_Retseptisahtel(x):
     else:
         return
 
-# no session 0:00:07.329809
-# with session 0:00:05.461197
-# total time ?
+
 if __name__ == '__main__':
     s = requests.Session()
     start = datetime.datetime.now()
-    with open('ingredients.txt', 'w', encoding='UTF-8') as file:
+    with open('ingredients2.txt', 'w', encoding='UTF-8') as file:
         for i in range(1, 90):
             page_info = getinfo_Retseptisahtel(i)
             if page_info:
-                file.write(f'Page {i}\n')
                 for n, (ingredients, link) in enumerate(page_info, 1):
                     ingredients_str = ", ".join(ingredients)
-                    file.write(f'{n} - {ingredients} | {link}\n')
-                file.write('\n\n')
+                    file.write(f'{ingredients} | {link}\n')
                 print(i)
 
     finish = datetime.datetime.now() - start
