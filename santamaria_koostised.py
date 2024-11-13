@@ -28,9 +28,9 @@ def lingid_santamaria():
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     lingid = soup.find_all('a', class_ = 'sm-recipe-card__image-link')
-    with open('santamaria_lingid.txt', 'w', encoding='UTF-8') as fail
+    with open('santamaria_lingid.txt', 'w', encoding='UTF-8') as fail:
         for link in lingid:
-            fail.writelines(f'{link.get('href')}\n')
+            fail.writelines(f"{link.get('href')}\n")
 
 
 ## funktsioon leiab igast lingist koostis osad ja kirjutab faili need koostisosad listina + lingi.
@@ -63,8 +63,8 @@ def koostisosad():
     file.close()
     file2.close()
 
-
-## SIIT ALGAVAD PÕHIPROGRAMMI FUNKT.
+lingid_santamaria()
+koostisosad()
 
 
 
