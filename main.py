@@ -48,7 +48,7 @@ def andmete_ühilduvus(jär1, jär2):
 
 #
 def sobivaimad_retseptid(sõnastik, top_n):
-    def skoor(olemas, puudu, sisendi_pikkus):
+    def skoor(olemas, puudu):
         if olemas == 0:
             return -float('inf')
         return olemas - (puudu ** 1.5)
@@ -58,10 +58,10 @@ def sobivaimad_retseptid(sõnastik, top_n):
         key: value for key, value in sõnastik.items() 
         if not any(exclude_word in key for exclude_word in välistatud_sõnad)
     }
-
+    st.write(filtered_sõnastik["https://www.santamariaworld.com/ee/retseptid/tex-mex-takoburger/"])
     järjestatult = sorted(
         filtered_sõnastik.items(),
-        key=lambda x: skoor(x[1][0], x[1][1], len(sisestatud_sõnad)),
+        key=lambda x: skoor(x[1][0], x[1][1]),
         reverse=True
         )
     parimad = järjestatult[:top_n]
@@ -72,7 +72,6 @@ def main():
     global sisestatud_sõnad
     st.title('Üliõpilaskülmik')
     sisend = st.text_input('Sisesta külmiku jäägid nt(vahukoor pasta): ')
-    hulk = st.text_input('Sisesta mitut retsepti soovid näha')
     if st.button('Leia retseptid'):
         sisestatud_sõnad = sisend.split()
         lst_retsept = andmed_failist('kõik_koostisosad.txt')
@@ -82,11 +81,7 @@ def main():
             ühised = andmete_ühilduvus(retsept[0], sisestatud_sõnad)
             if retsept[1] not in sõnastik:
                 sõnastik[retsept[1]] = ühised
-        try:
-            hulk = int(hulk)
-        except Exception:
-            hulk = 10
-        top = sobivaimad_retseptid(sõnastik, hulk)
+        top = sobivaimad_retseptid(sõnastik, 10)
         for k, v in top.items():
             nimetus = k.split('/')[-2].replace('-', ' ')
             with st.expander(nimetus):
