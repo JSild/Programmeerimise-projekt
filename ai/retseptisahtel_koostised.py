@@ -21,14 +21,6 @@ async def fetch_and_parse(session, link):
             return ingredients, link
         else:
             return False
-        # for ul_tag in ul_tags
-        #     if ul_tag:
-        #         ingredients = []
-        #         for li in ul_tag.find_all('li'):
-        #             ingredients.append(li.get_text())
-        #         return (ingredients, link)
-        #     else:
-        #         return False
 
 def getinfo_Retseptisahtel(x):
     #base url kus x = leheküljenumber
