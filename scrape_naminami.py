@@ -33,7 +33,7 @@ def koostisosad():
                         
                         # Write ingredients as a list followed by the URL
                         if ingredients:
-                            file2.write('['+ ', '.join(ingredients) + ']' + ' | ' + url + '\n')
+                            file2.write(f'{ingredients} | {url}\n')
                 except Exception as e:
                     print(f"Error processing URL {url}: {e}")
 
