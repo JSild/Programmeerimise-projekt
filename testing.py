@@ -19,15 +19,21 @@ def leia_ühised(koostisosad, olemasolevad_asjad):
     # Funktsioon võtab argumendiks koostisosad ning kasutaja sisendi,
     # ning tagastab 2 elemendilise enniku kus on esimesel kohal ühiste asjade arv
     # ja teisel kohal puud olevate asjade arv
-    ühised = []
+    ühised = set()
+    erinevad = 0
+    samad = 0
+    ära_loenda = {'Santa', 'õli', 'sool ', 'pipar', 'äädika', 'maitseaine'}
+    uued_koostisosad = koostisosad
     for el in koostisosad:
-        if 'Santa' in el or 'õli' in el:
-            continue
+        if any(keyword in el for keyword in ära_loenda):
+            uued_koostisosad.remove(el)
+
+    for el in uued_koostisosad:
         for sõne in olemasolevad_asjad:
-            if sõne in el:
+            if sõne in el and sõne not in ühised:
                 ühised.append(sõne)
 
-    return [len(ühised), (len(koostisosad) - len(ühised))]
+    return [len(ühised), (len(koostisosad) - len(ühised))], ühised
 
 
 def filtreeri_ja_järjesta_retseptid(retseptikogu, top_n, välistatud_sõnad=None):
@@ -88,26 +94,34 @@ def main():
             return
 
         olemasolevad_asjad = kasutaja_sisend.split()
+        if 'või' in olemasolevad_asjad:
+            i = olemasolevad_asjad.index('või')
+            olemasolevad_asjad[i] = 'võid'
         retseptid = loe_failist("kõik_koostisosad.txt")
 
         # Kontrollib kasutaja sisendi ja koostisosade ühilduvust
-        retseptikogu = {
-            retsept[1]: leia_ühised(retsept[0], olemasolevad_asjad)
-            for retsept in retseptid
-        }
+        retseptikogu = {}
+        ühised_koostisosad = {}
+        for retsept in retseptid:
+            skoor_andmed, ühised = leia_ühised(retsept[0], olemasolevad_asjad)
+            retseptikogu[retsept[1]] = skoor_andmed
+            ühised_koostisosad[retsept[1]] = ühised
 
 
         # Filtreerib ja järjestab top 10 retsepti
-        top_recipes = filtreeri_ja_järjesta_retseptid(retseptikogu, top_n=10, välistatud_sõnad=välistatud)
+        top_retseptid = filtreeri_ja_järjesta_retseptid(retseptikogu, top_n=10, välistatud_sõnad=välistatud)
 
         # Näita retsepte
-        for link, value in top_recipes.items():
-            recipe_name = link.split("/")[-2].replace("-", " ")
-            with st.expander(recipe_name):
+        for link, väärtus in top_retseptid.items():
+            if link.startswith('https://nami-nami.ee/'):
+                retsepti_nimi = link.split("/")[-1].replace("_", " ")
+            else:
+                retsepti_nimi = link.split("/")[-2].replace("-", " ")
+            with st.expander(retsepti_nimi):
                 st.write(
                     f"""
-                    **Koostisosi olemas:** {value[0]}\n
-                    **Koostisosi vaja:** {value[1]}\n
+                    **Koostisosi olemas:** {väärtus[0]} [{', '.join(ühised_koostisosad[link])}]\n
+                    **Koostisosi vaja:** {väärtus[1]}\n
                     [Retsept]({link})
                     """
                 )
